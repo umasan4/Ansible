@@ -12,7 +12,7 @@ variable "env" {
 #------------------------------
 resource "aws_s3_bucket" "remote" {
   for_each = toset(var.env)
-  bucket   = "<S3-BUCKET-NAME>-${each.key}"
+  bucket   = "ansible-remote-2025-${each.key}"
 
   # Terraformコマンドによる誤削除防止
   lifecycle { prevent_destroy = true }
@@ -108,7 +108,7 @@ resource "aws_s3_bucket_policy" "remote_policy" {
 #------------------------------
 resource "aws_dynamodb_table" "remote_locks" {
   for_each     = toset(var.env)
-  name         = "remote-locks-${each.key}"
+  name         = "ansible-remote-locks-${each.key}"
   billing_mode = "PAY_PER_REQUEST" # 課金モード <オンデマンド>
   hash_key     = "LockID"          # 主キー
 

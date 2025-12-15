@@ -10,7 +10,7 @@ terraform {
       version = "~> 5.0"
     }
   }
-# terraform backend
+  # terraform backend
   backend "s3" {
     bucket         = "ansible-remote-2025-dev"
     key            = "dev/terraform.tfstate"
@@ -24,4 +24,11 @@ terraform {
 provider "aws" {
   region  = "ap-northeast-1"
   profile = "Terraform-resource"
+
+  default_tags {
+    tags = {
+      Project     = var.project
+      Environment = var.env
+    }
+  }
 }

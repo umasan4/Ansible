@@ -12,8 +12,8 @@ terraform {
   }
 # terraform backend
   backend "s3" {
-    bucket         = "ansible-remote-2025-dev"
-    key            = "dev/terraform.tfstate"
+    bucket         = "ansible-remote-2025-prod"
+    key            = "prod/terraform.tfstate"
     region         = "ap-northeast-1"
     dynamodb_table = "ansible-remote-locks-dev"
     encrypt        = true

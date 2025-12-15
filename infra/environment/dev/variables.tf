@@ -1,7 +1,6 @@
 #------------------------------
 # tags
 #------------------------------
-variable "tags_name" { type = string }
 variable "env" { type = string }
 variable "project" { type = string }
 
@@ -17,7 +16,6 @@ variable "vpc_tenancy" {
 #------------------------------
 # subnet
 #------------------------------
-variable "vpc_id" { type = string }
 variable "subnet_map" {
   description = "{key:name = value:cidr}"
   type        = map(string)

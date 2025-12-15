@@ -1,7 +1,7 @@
 output "subnet_ids" {
   description = "リソースMapからIDだけを抽出した、新たなMapを作成する"
   # NAMEは自身の環境のsubnet名に変更
-  value       = {for key, value in aws_subnet.NAME : key => value.id }
+  value       = {for key, value in aws_subnet.main : key => value.id }
 }
 
 #-----------------------------------

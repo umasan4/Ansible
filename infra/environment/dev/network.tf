@@ -17,3 +17,22 @@ module "subnet_dev" {
   subnet_map = var.subnet_map
   tags_name  = "${var.project}-subnet-${var.env}"
 }
+
+#------------------------------
+# route_table <public>
+#------------------------------
+
+
+#------------------------------
+# route_table <private>
+#------------------------------
+
+
+#------------------------------
+# igw
+#------------------------------
+module "igw" {
+  source = "../../modules/network/igw"
+  vpc_id = module.vpc_dev.vpc_id
+  tags   = "${var.project}-igw"
+}

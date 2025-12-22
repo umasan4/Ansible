@@ -10,7 +10,7 @@ variable "tags_name" { type = string }
 #------------------------------
 variable "subnet_ids" {
   description = "subnet outputs (key: name / value: id)"
-  type = map(string)
+  type        = map(string)
 }
 
 #------------------------------

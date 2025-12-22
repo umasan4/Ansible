@@ -10,7 +10,7 @@ terraform {
       version = "~> 5.0"
     }
   }
-# terraform backend
+  # terraform backend
   backend "s3" {
     bucket         = "ansible-remote-2025-prod"
     key            = "prod/terraform.tfstate"

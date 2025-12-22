@@ -20,27 +20,22 @@ module "igw" {
 #------------------------------
 # sg
 #------------------------------
-# subnet_map = {
-#   "nat-subnet-dev"    = "192.168.3.0/24"
-#   "target-subnet-dev" = "192.168.4.0/24"
-# }
-
 module "subnet_dev" {
   source     = "../../modules/network/subnet"
   vpc_id     = module.vpc_dev.vpc_id
   subnet_map = var.subnet_map
-  tags_name  = "${var.project}"
+  tags_name  = var.project
 }
 
 #------------------------------
 # rt_public
 #------------------------------
 module "public" {
-  source = "../../modules/network/rt_public"
-  vpc_id = module.vpc_dev.vpc_id
-  igw_id = module.igw.igw_id
+  source     = "../../modules/network/rt_public"
+  vpc_id     = module.vpc_dev.vpc_id
+  igw_id     = module.igw.igw_id
   subnet_ids = { "nat-subnet-dev" = module.subnet_dev.subnet_ids["nat-subnet-dev"] }
-  tags_name = "${var.project}-rt-public-${var.env}"
+  tags_name  = "${var.project}-rt-public-${var.env}"
 }
 
 #------------------------------

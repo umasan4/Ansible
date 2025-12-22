@@ -9,26 +9,6 @@ module "vpc_dev" {
 }
 
 #------------------------------
-# subnet
-#------------------------------
-module "subnet_dev" {
-  source     = "../../modules/network/subnet"
-  vpc_id     = module.vpc_dev.vpc_id
-  subnet_map = var.subnet_map
-  tags_name  = "${var.project}-subnet-${var.env}"
-}
-
-#------------------------------
-# route_table <public>
-#------------------------------
-
-
-#------------------------------
-# route_table <private>
-#------------------------------
-
-
-#------------------------------
 # igw
 #------------------------------
 module "igw" {
@@ -36,3 +16,41 @@ module "igw" {
   vpc_id = module.vpc_dev.vpc_id
   tags   = "${var.project}-igw"
 }
+
+#------------------------------
+# sg
+#------------------------------
+# subnet_map = {
+#   "nat-subnet-dev"    = "192.168.3.0/24"
+#   "target-subnet-dev" = "192.168.4.0/24"
+# }
+
+module "subnet_dev" {
+  source     = "../../modules/network/subnet"
+  vpc_id     = module.vpc_dev.vpc_id
+  subnet_map = var.subnet_map
+  tags_name  = "${var.project}"
+}
+
+#------------------------------
+# rt_public
+#------------------------------
+module "public" {
+  source = "../../modules/network/rt_public"
+  vpc_id = module.vpc_dev.vpc_id
+  igw_id = module.igw.igw_id
+  subnet_ids = { "nat-subnet-dev" = module.subnet_dev.subnet_ids["nat-subnet-dev"] }
+  tags_name = "${var.project}-rt-public-${var.env}"
+}
+
+#------------------------------
+# rt_private
+#------------------------------
+# nat instance がまだ
+# module "private" {
+#   source = "../../modules/network/rt_private"
+#   vpc_id = module.vpc_dev.vpc_id
+#   eni_id = "hoge"
+#   subnet_ids = ""
+#   name_tag = "${var.project}-rt-private-${var.env}"
+# }

@@ -1,4 +1,5 @@
 resource "aws_instance" "main" {
+  for_each      = var.instances
   ami           = var.ami_id
   instance_type = var.instance_type
 
@@ -7,7 +8,9 @@ resource "aws_instance" "main" {
   iam_instance_profile   = var.iam_instance_profile
   key_name               = var.key_name
 
-  tags = { Name = var.tags_name }
+  tags = {
+    Name = "${var.tags_name}-${each.key}"
+  }
 
   # nat instance only
   associate_public_ip_address = var.associate_public_ip_address

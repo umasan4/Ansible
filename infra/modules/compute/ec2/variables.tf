@@ -2,6 +2,7 @@
 # instance / common
 #------------------------------
 # machine
+variable "instances" { type = map(string) }
 variable "tags_name" { type = string }
 variable "ami_id" { type = string }
 variable "instance_type" { type = string }

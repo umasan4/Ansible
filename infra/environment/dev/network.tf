@@ -41,11 +41,10 @@ module "public" {
 #------------------------------
 # rt_private
 #------------------------------
-# nat instance がまだ
-# module "private" {
-#   source = "../../modules/network/rt_private"
-#   vpc_id = module.vpc_dev.vpc_id
-#   eni_id = "hoge"
-#   subnet_ids = ""
-#   name_tag = "${var.project}-rt-private-${var.env}"
-# }
+module "private" {
+  source     = "../../modules/network/rt_private"
+  vpc_id     = module.vpc_dev.vpc_id
+  eni_id     = module.nat.network_interface_ids["nat"]
+  subnet_ids = { "target" = module.subnet_dev.subnet_ids["target-subnet-dev"] }
+  tags_name  = "${var.project}-rt-private-${var.env}"
+}

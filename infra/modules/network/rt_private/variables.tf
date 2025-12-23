@@ -12,11 +12,3 @@ variable "subnet_ids" {
   description = "subnet outputs (key: name / value: id)"
   type        = map(string)
 }
-
-#------------------------------
-# network interface (eni_id)
-#------------------------------
-# variable "eni_id" {
-#   description = "nat instance eni id"
-#   type = string
-# }

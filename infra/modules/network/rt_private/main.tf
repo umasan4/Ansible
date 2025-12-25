@@ -19,7 +19,7 @@ resource "aws_route" "private_eni_route" {
 # rt_private / association
 #------------------------------
 resource "aws_route_table_association" "private" {
-  for_each       = var.subnet_ids
+  for_each       = var.private_subnet_ids
   subnet_id      = each.value
   route_table_id = aws_route_table.private.id
 }

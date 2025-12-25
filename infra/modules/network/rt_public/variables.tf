@@ -8,7 +8,7 @@ variable "tags_name" { type = string }
 #------------------------------
 # route table association public
 #------------------------------
-variable "subnet_ids" {
+variable "public_subnet_ids" {
   description = "subnet outputs (key: name / value: id)"
   type        = map(string)
 }

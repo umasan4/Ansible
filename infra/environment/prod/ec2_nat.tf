@@ -69,18 +69,18 @@ resource "aws_eip_association" "nat" {
 # instance profile
 resource "aws_iam_instance_profile" "nat" {
   name = "${var.project}-iam_instance_profile-nat-${var.env}"
-  role = aws_iam_role.nat_dev.name
+  role = aws_iam_role.nat_prod.name
   tags = { Name = "${var.project}-iam_instance_profile-nat-${var.env}" }
 }
 
 # policy_attachment ( ec2(ssm agent) ⇔ ssm )
 resource "aws_iam_role_policy_attachment" "nat" {
-  role       = aws_iam_role.nat_dev.name
+  role       = aws_iam_role.nat_prod.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 # role
-resource "aws_iam_role" "nat_dev" {
+resource "aws_iam_role" "nat_prod" {
   name = "${var.project}-iam_role-nat-${var.env}"
 
   assume_role_policy = jsonencode({

@@ -8,7 +8,7 @@ variable "tags_name" { type = string }
 #------------------------------
 variable "vpc_id" { type = string }
 
-variable "subnet_map" {
+variable "subnets_public" {
   description = "{key:name = value:cidr}"
   type        = map(string)
 

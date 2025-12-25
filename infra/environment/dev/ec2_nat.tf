@@ -52,7 +52,7 @@ data "aws_ami" "fck_nat" {
 #------------------------------
 resource "aws_eip" "nat" {
   domain = "vpc"
-  tags   = { Name = "${var.project}-eip-${var.env}" }
+  tags   = { Name = "${var.project}-${var.env}-eip" }
 }
 
 # eip association
@@ -68,9 +68,9 @@ resource "aws_eip_association" "nat" {
 
 # instance profile
 resource "aws_iam_instance_profile" "nat" {
-  name = "${var.project}-iam_instance_profile-nat-${var.env}"
+  name = "${var.project}-${var.env}-iam_instance_profile-nat"
   role = aws_iam_role.nat_dev.name
-  tags = { Name = "${var.project}-iam_instance_profile-nat-${var.env}" }
+  tags = { Name = "${var.project}-${var.env}-iam_instance_profile-nat" }
 }
 
 # policy_attachment ( ec2(ssm agent) ⇔ ssm )
@@ -81,7 +81,7 @@ resource "aws_iam_role_policy_attachment" "nat" {
 
 # role
 resource "aws_iam_role" "nat_dev" {
-  name = "${var.project}-iam_role-nat-${var.env}"
+  name = "${var.project}-${var.env}-iam_role-nat"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -95,14 +95,14 @@ resource "aws_iam_role" "nat_dev" {
       }
     ]
   })
-  tags = { Name = "${var.project}-iam_role-nat${var.env}" }
+  tags = { Name = "${var.project}-${var.env}-iam_role-nat" }
 }
 
 #------------------------------
 # sg
 #------------------------------
 resource "aws_security_group" "nat" {
-  name   = "${var.project}-nat_sg-${var.env}"
+  name   = "${var.project}-${var.env}-nat_sg"
   vpc_id = module.vpc.vpc_id
 
   # ingress / [192.168.0.0/16] all
@@ -126,5 +126,5 @@ resource "aws_security_group" "nat" {
   # note:-1...すべて許可
   # note: 1...Pingのみ許可
 
-  tags = { Name = "${var.project}-nat_sg-${var.env}" }
+  tags = { Name = "${var.project}-${var.env}-nat_sg" }
 }

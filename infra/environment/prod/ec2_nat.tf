@@ -3,7 +3,7 @@
 #------------------------------
 locals {
   # subnet id だけのリストを作成
-  subnet_publuc_id_list = values(module.subnet_public.subnet_public_ids)
+  subnet_public_id_list = values(module.subnet_public.subnet_public_ids)
 }
 
 #------------------------------
@@ -24,7 +24,7 @@ module "nat" {
   }
 
   # security
-  subnet_id              = local.subnet_publuc_id_list[0]
+  subnet_id              = local.subnet_public_id_list[0]
   vpc_security_group_ids = [aws_security_group.nat.id]
   iam_instance_profile   = aws_iam_instance_profile.nat.name
 
@@ -111,12 +111,12 @@ resource "aws_security_group" "nat" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["192.168.0.0/16"]
+    cidr_blocks = [var.vpc_cidr]
   }
 
   # egress / allow all
   egress {
-    description = "Allow all outbound taffic"
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"

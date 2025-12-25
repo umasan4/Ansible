@@ -107,7 +107,7 @@ resource "aws_security_group" "target" {
 
   # NAT経由で外に出るため
   egress {
-    description = "Allow all outbound taffic"
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"

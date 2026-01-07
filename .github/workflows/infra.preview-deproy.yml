@@ -1,0 +1,25 @@
+name: "infra preview & deploy"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - infra/environment/**
+      - .github/workflows/**
+  workflow_dispatch:
+
+permissions:
+  id-token: write # Githubが発行するトークンを取得する権限
+  contents: read  # リポジトリのコードを読み取る権限
+
+jobs:
+  preview:
+    name: "preview"
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Hello World."
+
+    
+    

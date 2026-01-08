@@ -1,4 +1,4 @@
-name: "infra preview & deploy"
+name: "infra dev preview & deploy"
 
 on:
   push:
@@ -15,7 +15,7 @@ env:
 defaults:
   run:
     shell: bash
-    working-directory: "infra/environment/**"
+    working-directory: "infra/environment/dev/"
 
 # Githubからﾄｰｸﾝ、ｺｰﾄﾞを取得する権限
 permissions:

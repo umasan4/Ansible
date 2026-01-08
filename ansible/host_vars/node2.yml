@@ -1,0 +1,17 @@
+#-------------------------
+# host_vars/node2
+#-------------------------
+# ntp client
+ntp: 
+  is_server: false
+  is_client: true
+
+common_fs:
+  size: 1024
+  file: "/var/tmp/ansible_test_common.img"
+  mount_point: /mnt/ansible_test_common
+
+unique_fs:
+  size: 1024
+  file: "/var/tmp/ansible_test_{{ inventory_hostname }}.img"
+  mount_point: /mnt/ansible_test_{{ inventory_hostname }}

@@ -1,0 +1,12 @@
+#-------------------------
+# create_files.j2
+#-------------------------
+# ntp_server / node1
+{% if ntp.is_server %}
+hostname = {{ inventory_hostname }}
+{% endif %}
+
+# ntp_client / node2
+{% if ntp.is_client %}
+hostname = {{ inventory_hostname }}
+{% endif %}

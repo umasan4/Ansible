@@ -1,0 +1,45 @@
+✅ 改善・追加のアドバイス
+
+
+AnsibleバージョンとPython環境の記載
+
+Control Nodeに「Ansible 2.15.13」「Python 3.x」などを明記すると、後で互換性確認がしやすい。
+
+
+
+通信経路の明示
+
+Control Node → Target Node間のSSH接続（ポート22）を矢印で示すと、ネットワーク要件が一目で分かる。
+
+
+
+認証方式
+
+SSH鍵認証を使うなら「SSH Key-based Auth」と記載すると、セキュリティ設計が明確になる。
+
+
+
+OS情報
+
+Target NodeのOS（例：CentOS 8、Ubuntu 22.04）を記載すると、Playbookの互換性を確認しやすい。
+
+
+
+インベントリ構成の補足
+
+inventoryの中に[ntpserver]と[ntpclient]グループを定義するイメージを追加すると、Ansibleのグループ設計が分かりやすい。
+
+
+
+ロールやPlaybookの役割
+
+Control Nodeの「playbook」アイコンの下に「ntp.yml」など具体的なPlaybook名を記載すると、構成図がより実務的になる。
+
+
+
+
+✅ 追加すると良い要素
+
+requirements.ymlの位置（Control Nodeに置く）
+rolesディレクトリの存在（ロールベース構成なら）
+VMwareネットワークタイプ（NAT / Host-only / Bridged）

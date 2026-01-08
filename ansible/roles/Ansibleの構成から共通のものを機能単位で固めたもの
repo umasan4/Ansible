@@ -1,0 +1,42 @@
+#----------------------------------#
+# roleとは
+#----------------------------------
+Ansibleの構成要素から、環境（dev, prodなど）をまたいでも共通の機能をまとめたもの
+例: webサーバの作成（Webサーバ自体はどちらも作成する、configなどは環境で設定が異なる）
+
+#----------------------------------
+# 例：ディレクトリ構成例
+#----------------------------------
+# roles
+roles/
+  apache/
+    tasks/main.yml
+    templates/httpd.conf.j2
+    defaults/main.yml
+
+# inventory
+# inventoryで各環境用の変数（差分）を定義する
+inventory/
+  dev/
+    hosts.ini
+    group_vars/all.yml
+
+  prod/
+    hosts.ini
+    group_vars/all.yml
+site.yml                 # メインPlaybook
+
+#----------------------------------
+# roleは playbookから呼び出す
+#----------------------------------
+- name: サーバセットアップ
+  hosts: webservers        # 対象ホストグループ
+  become: true             # root権限で実行
+  vars:                    # 変数定義（必要なら）
+    example_var: value
+  roles:                   # Roleを呼び出す
+    - apache
+    - ntp
+  tasks:                   # 直接タスクを書くことも可能
+    - name: Ping test
+      ansible.builtin.ping

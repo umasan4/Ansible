@@ -1,0 +1,117 @@
+# ファイルシステムを作成
+- name: create filesystems
+  hosts: all
+  gather_facts: true
+  become: yes
+  # vars: host_vars で定義済み
+
+#------------------------------
+# common
+#------------------------------
+  tasks:
+  
+# ファイルを作成
+    - name: create file
+      ansible.builtin.shell: |
+        fallocate -l {{ common_fs.size }}M {{ common_fs.file }}
+      args:
+          # <common_fs.file> が作成済みならパス
+          creates: "{{ common_fs.file }}"
+      
+# デバイスを作成
+    - name: create device
+      # <common_fs.file> に仮想デバイスが割り当て済みならt/違えばf
+      ansible.builtin.shell: |
+        if losetup -j {{ common_fs.file }} | grep -q '{{ common_fs.file }}'; then
+          losetup -j {{ common_fs.file }} | cut -d: -f1
+        else
+          losetup -f --show {{ common_fs.file }}
+        fi
+      register: common_loop_device
+      # 実行されたコマンド中に "losetup -f"が含まれていれば 変更ありを返す
+      # losetup -f はデバイス新規作成 → つまり変更があった
+      changed_when: "'losetup -f' in common_loop_device.cmd"
+
+# ファイルシステムを作成
+    - name: create filesystem
+      ansible.builtin.filesystem:
+        fstype: ext4
+        dev: "{{ common_loop_device.stdout }}"
+        force: no
+
+# マウントポイントを作成
+    - name: create mount point
+      ansible.builtin.file:
+        path: "{{ common_fs.mount_point }}"
+        state: directory
+
+# マウントを実行
+    - name: mount
+      ansible.builtin.mount:
+        path: "{{ common_fs.mount_point }}"
+        src: "{{ common_loop_device.stdout }}"
+        fstype: ext4
+        state: mounted
+      register: common_mount_result
+
+# マウントされたか検証
+    - name: debug
+      ansible.builtin.debug:
+        msg: "{{ common_fs.mount_point }} にファイルシステムがマウントされました"
+      # mount が成功していればメッセージ表示
+      when: common_mount_result is succeeded
+
+#------------------------------
+# unique
+#------------------------------
+
+# ファイルを作成
+    - name: create file
+      ansible.builtin.shell: |
+        fallocate -l {{ unique_fs.size }}M {{ unique_fs.file }}
+      args:
+          # 作成済みならパス
+          creates: "{{ unique_fs.file }}"
+
+# デバイスを作成
+    - name: create device
+      # unique_fs.file に デバイスが割り当て済みならT 違えばF
+      ansible.builtin.shell: |
+        if losetup -j {{ unique_fs.file }} | grep -q '{{ unique_fs.file }}'; then
+          losetup -j {{ unique_fs.file }} | cut -d: -f1
+        else
+          losetup -f --show {{ unique_fs.file }}
+        fi
+      register: unique_loop_device
+      # 実行されたコマンド中に "losetup -f"が含まれていれば 変更ありを返す
+      # losetup -f は新しくループデバイスを作成する。それ以外は変更なしを返す
+      changed_when: "'losetup -f' in unique_loop_device.cmd"
+
+# ファイルシステムを作成
+    - name: create filesystem
+      ansible.builtin.filesystem:
+        fstype: ext4
+        dev: "{{ unique_loop_device.stdout }}"
+        force: no
+
+# マウントポイントを作成
+    - name: create mount point
+      ansible.builtin.file:
+        path: "{{ unique_fs.mount_point }}"
+        state: directory
+
+# マウントを実行
+    - name: mount
+      ansible.builtin.mount:
+        path: "{{ unique_fs.mount_point }}"
+        src: "{{ unique_loop_device.stdout }}"
+        fstype: ext4
+        state: mounted
+      register: unique_mount_result
+
+# マウントされたか検証
+    - name: debug
+      ansible.builtin.debug:
+        msg: "{{ unique_fs.mount_point }} にファイルシステムがマウントされました"
+      # mount が成功していればメッセージ表示
+      when: unique_mount_result is succeeded

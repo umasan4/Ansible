@@ -1,0 +1,42 @@
+- name: setup apache
+  hosts: all
+  become: yes
+  gather_facts: true
+
+  vars:
+    apache_package: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+    apache_service: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+  tasks:
+
+    # Apache インストール
+    - name: install apache
+      ansible.builtin.package:
+        name: "{{ apache_package }}"
+        state: present
+      register: apache_install_result
+
+    # Apache インストール結果
+    - name: apache install result
+      ansible.builtin.debug:
+        var: apache_install_result
+
+    # Apache サービス起動＆有効化
+    - name: apache service running and enabled
+      ansible.builtin.service:
+        name: "{{ apache_service }}"
+        state: started
+        enabled: yes
+
+    # Apache サービスの稼働状態の情報を収集
+    - name: apache service status result
+      ansible.builtin.service_facts:
+
+    # Apache サービス状態を確認
+    # assert モジュール: thatで指定した条件
+    - name: Assert Apache is active
+      ansible.builtin.assert:
+        that:
+          - "'{{ apache_service }}' in ansible_facts.services"
+          - "ansible_facts.services[apache_service].state = 'running'"
+        fail_msg: "Apache service is NOT running"
+        success_msg: "Apache service is running"

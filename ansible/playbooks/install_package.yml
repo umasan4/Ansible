@@ -1,0 +1,26 @@
+# ターゲットノードにAnsibleの動作に必要なパッケージを導入する
+
+  - name: targetnode_setup
+    hosts: all
+    gather_facts: true
+    become: true
+    tasks:
+      - name: Install base packages on RHEL
+        ansible.builtin.dnf:
+          name:
+            - python3
+            - sudo
+            - cronie
+            - chrony
+            - e2fsprogs
+            - util-linux
+          state: present
+        when: ansible_os_family == "Redhat"
+
+# - インストールパッケージの補足
+# python3    → Ansible実行に必須
+# sudo       → 権限昇格に必要
+# cronie     → cronジョブ管理
+# chrony     → NTP同期サービス
+# e2fsprogs  → extファイルシステム管理ツール
+# util-linux → 基本的なLinuxユーティリティ（mount, fdiskなど

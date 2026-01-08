@@ -1,0 +1,38 @@
+#---------------------------------
+# common
+#---------------------------------
+# 上位 ntp サーバを指定
+pool ntp.nict.jp iburst
+
+# 時刻同期 step モード
+  # <引数1> 秒以上にズレたら、
+  # <引数2> 回だけ時刻同期を試みる
+makestep 1.0 3
+
+# OS → H/Wクロックに同期
+rtcsync
+
+# log 保存先
+logdir /var/log/chrony
+
+#---------------------------------
+# ntp_server
+#---------------------------------
+{% if ntp.is_server %}
+# node2のアクセスを許可
+allow 192.168.200.0/24
+
+# 上位NTPが落ちてもローカルクロックを配信
+local stratum 10
+
+{% endif %}
+
+#---------------------------------
+# ntp_client
+#---------------------------------
+{% if ntp.is_client %}
+
+# 時刻の問い合わせ先
+server {{ ntp_server_host }} iburst prefer
+
+{% endif %}

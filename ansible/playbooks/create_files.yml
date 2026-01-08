@@ -1,0 +1,24 @@
+# ファイル作成
+- name: create files
+  hosts: all
+  gather_facts: true
+  become: yes
+  tasks:
+
+#------------------------------
+# common
+#------------------------------
+    - name: create common files
+      ansible.builtin.lineinfile:
+        path: /tmp/an/common.txt
+        line: "common text"
+        state: present # 行を作成(present) / 削除(absent)
+        create: yes    # 対象ファイル無い場合作る？
+
+#------------------------------
+# unique
+#------------------------------
+    - name: create unique files
+      ansible.builtin.template:
+        src: ../templates/create_files.j2
+        dest: /tmp/an/{{ inventory_hostname }}.txt

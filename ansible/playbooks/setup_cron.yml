@@ -1,0 +1,30 @@
+- name: setup_cron
+  hosts: all
+  gather_facts: true
+  become: yes
+  tasks:
+    - name: 1分ごとに時刻をログに出力するcronジョブを作成
+      ansible.builtin.cron:
+        name: "ansible test job" # job名
+        minute: "*/1" # 毎分
+        job: "date >> /tmp/ansible_cron_test.log"
+        state: present # 同名jobが既存なら中身の更新だけ行い、存在しなければ作成する
+        cron_file: "ansible_test_job" # /etc/cron.d/ の下にcronファイルを作成
+        user: root # 実行ユーザ
+
+    - name: cron job の作成を確認
+      ansible.builtin.command: cat /etc/cron.d/ansible.job
+      register: crontab_content
+      changed_when: false # 確認のみで変更を加えないtaskであることを明示
+
+    - name: cron job の中身を確認
+      ansible.builtin.debug:
+        var: crontab_content.stdout_lines # cat の結果が行ごとに表示される
+
+# cron job の削除
+#    - name: delete cron job
+#      ansible.builtin.cron:
+#        name: "ansible test job"
+#        state: absent # 削除
+#        cron_file: "ansible_test_job"
+#        user: root

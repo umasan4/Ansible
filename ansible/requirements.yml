@@ -1,0 +1,11 @@
+# ---memo---
+# Galaxyロールや依存関係の定義
+# collections: version は、Ansible[2.15.13]の推奨バージョンを指定
+# 定期的にansible-galaxy collection listで確認し、アップデート検証を推奨
+
+# collections
+collections:
+  - name: ansible.posix
+    version: 1.6.0
+  - name: community.general
+    version: 7.5.0

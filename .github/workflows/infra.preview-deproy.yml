@@ -17,19 +17,26 @@ defaults:
     shell: bash
     working-directory: "infra/environment/**"
 
-permissions: # Githubからﾄｰｸﾝ、ｺｰﾄﾞを取得する権限
+# Githubからﾄｰｸﾝ、ｺｰﾄﾞを取得する権限
+permissions:
   id-token: write
   contents: read
 
 jobs:
-  test-auth:
+  preview:
     name: "preview"
     runs-on: ubuntu-latest
     steps:
+      # --- Setup Phase ---
       - name: Checkout repository
         uses: actions/checkout@v6
       
-      - name: terraform Setup
+      - name: Terraform setup
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
+      
+      - name: Terraform format
+        run: | 
+          terraform fmt -check
+        # -check: ﾌｫｰﾏｯﾄが正ならば0を返す

@@ -9,34 +9,27 @@ on:
       - .github/workflows/**
   workflow_dispatch:
 
-permissions:
-  id-token: write # Githubが発行するトークンを取得する権限
-  contents: read  # リポジトリのコードを読み取る権限
+env:
+  TF_VERSION: 1.13.4
 
-# jobs:
-#   preview:
-#     name: "preview"
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: |
-#           echo "Hello World."
+defaults:
+  run:
+    shell: bash
+    working-directory: "infra/environment/**"
+
+permissions: # Githubからﾄｰｸﾝ、ｺｰﾄﾞを取得する権限
+  id-token: write
+  contents: read
 
 jobs:
   test-auth:
     name: "preview"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      
+      - name: terraform Setup
+        uses: hashicorp/setup-terraform@v3
         with:
-          aws-region: ap-northeast-1
-          role-to-assume: arn:aws:iam::247049166586:role/ansible-githubactions-iam-role
-
-      - name: Verify Identity
-        run: aws sts get-caller-identity
-
-    
-    
+          terraform_version: ${{ env.TF_VERSION }}

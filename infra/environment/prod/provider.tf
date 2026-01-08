@@ -3,11 +3,11 @@
 #------------------------------
 # terraform version
 terraform {
-  required_version = ">= 1.10.0"
+  required_version = "1.13.4"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "5.100.0"
     }
   }
   # terraform backend
@@ -23,7 +23,7 @@ terraform {
 # terraform provider
 provider "aws" {
   region  = "ap-northeast-1"
-  profile = "Terraform-resource"
+  #profile = "Terraform-resource" # github-actions(OIDC)を使うためコメントアウト
 
   default_tags {
     tags = {

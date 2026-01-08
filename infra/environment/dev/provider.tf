@@ -22,7 +22,7 @@ terraform {
 }
 # terraform provider
 provider "aws" {
-  region  = "ap-northeast-1"
+  region = "ap-northeast-1"
   #profile = "Terraform-resource" # github-actions(OIDC)を使うためコメントアウト
 
   default_tags {

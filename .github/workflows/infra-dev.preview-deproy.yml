@@ -13,6 +13,7 @@ env:
   TF_VERSION: 1.13.4
   TF_PROJECT: ansible
   TF_ENVIRONMENT: dev
+  TF_VARFILE: infra/environment/dev/env_dev.tfvars
   AWS_REGION: ap-northeast-1
 
 defaults:
@@ -66,6 +67,7 @@ jobs:
       - name: Terraform Plan
         run: | 
           terraform plan \
+            -var-file=${{ env.TF_VARFILE }}
             -var 'project=${{ env.TF_PROJECT }}' \
             -var 'environment=${{ env.TF_ENVIRONMENT }}' \
             -input=false \
@@ -74,5 +76,6 @@ jobs:
         # -input-false: 値が未割当の変数があっても処理を継続
         # -detailed-exitcode: planの詳細情報を返す
         # (0:差分なし, 1:エラー, 2: 差分あり)...2の場合のみCDへ処理連携が必須
+        # DBへの接続ｸﾚﾃﾞﾝｼｬﾙがあれば secretとしてここで渡す
 
       

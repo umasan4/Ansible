@@ -55,5 +55,9 @@ jobs:
         run: | 
           terraform init -no-color
         # -no-color: ｶﾗｰｺｰﾄﾞを無効化(ﾛｸﾞ出力用)
+      
+      - name: Terraform Validate
+        run: | 
+          terraform validate -no-color
 
       

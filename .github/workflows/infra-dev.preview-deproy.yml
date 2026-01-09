@@ -46,15 +46,15 @@ jobs:
         # Github → repo → settings → Secrets and vars → Actions → New repo secret
 
       # --- Validate Phase ---
-      - name: Terraform Format
-        run: | 
-          terraform fmt -check
-        # -check: ﾌｫｰﾏｯﾄが正ならば0を返す
-
       - name: Terraform Init
         run: | 
           terraform init -no-color
         # -no-color: ｶﾗｰｺｰﾄﾞを無効化(ﾛｸﾞ出力用)
+
+      - name: Terraform Format
+        run: | 
+          terraform fmt -check
+        # -check: ﾌｫｰﾏｯﾄが正ならば0を返す
       
       - name: Terraform Validate
         run: | 

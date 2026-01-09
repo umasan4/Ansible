@@ -17,7 +17,7 @@ terraform {
     region         = "ap-northeast-1"
     dynamodb_table = "ansible-remote-locks-dev"
     encrypt        = true
-    profile        = "Terraform-resource"
+    #profile       = "Terraform-resource"
   }
 }
 # terraform provider

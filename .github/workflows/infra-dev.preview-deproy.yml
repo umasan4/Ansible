@@ -11,6 +11,7 @@ on:
 
 env:
   TF_VERSION: 1.13.4
+  AWS_REGION: ap-northeast-1
 
 defaults:
   run:
@@ -28,15 +29,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # --- Setup Phase ---
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v6
       
-      - name: Terraform setup
+      - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       
-      - name: Terraform format
+      - name: Configure AWS Cred
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+        # GithubのシークレットにIAMロールのARNを登録しておく
+        # Github → repo → settings → Secrets and vars → Actions → New repo secret
+
+      # --- Validate Phase ---
+      - name: Terraform Format
         run: | 
           terraform fmt -check
         # -check: ﾌｫｰﾏｯﾄが正ならば0を返す
+
+      - name: Terraform Init
+        run: | 
+          terraform init -no-color
+        # -no-color: ｶﾗｰｺｰﾄﾞを無効化(ﾛｸﾞ出力用)
+
+      
